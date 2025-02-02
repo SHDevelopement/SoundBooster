@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    /* Variables pour les thèmes */
+    [data-theme="light"] {
+      --bg-color: #f5f5f5;
+      --card-bg: white;
+      --text-color: #333;
+      --border-color: #e0e0e0;
+      --title-color: #1976d2;
+      --bg-gradient: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1a1a1a;
+      --card-bg: #2d2d2d;
+      --text-color: #ffffff;
+      --border-color: #404040;
+      --title-color: #90caf9;
+      --bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+
+    body {
+      width: 300px;
+      min-height: 325px;/*augementation de la hauter*/
+      padding: 40px 20px 20px; /* Augmentation du padding top */
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15); /* Ajout d'une ombre externe */
+    }
+
+    /* Ajouter un effet de profondeur au fond */
+    body::before {
+      content: '';
+      position: fixed; /* Changed from absolute to fixed */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-gradient);
+      z-index: -1;
+      border-radius: 20px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    h3 {
+      margin: 0 0 16px 0;
+      color: var(--title-color);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    /* Nouveau style pour le conteneur du volume et le symbole % */
+    .volume-input-container {
+      display: flex;
+      align-items: center;
+      gap: 2px;  /* Réduit l'espace entre l'input et le % */
+    }
+
+    #volumeSlider {
+      flex: 1;
+      height: 6px;
+      -webkit-appearance: none;
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    #volumeSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #1976d2;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    #volumeInput {
+      width: 60px;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      text-align: right;
+      font-size: 14px;
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    .button-container {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    button {
+      flex: 1;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    #muteButton {
+      background: #f44336;
+      color: white;
+    }
+
+    #resetButton {
+      background: #2196f3;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .material-icons {
+      font-size: 20px;
+    }
+
+    .current-site {
+      font-size: 12px;
+      color: #666;
+      margin-top: 16px;
+      text-align: center;
+      background: var(--card-bg);
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);  /* Ajout de l'ombre */
+      color: var(--text-color);                 /* Correction de la couleur du texte */
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Style pour le bouton theme */
+    .theme-toggle {
+      position: absolute;
+      top: 24px; /* Augmentation de la distance depuis le haut */
+      right: 24px; /* Augmentation de la distance depuis la droite */
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      cursor: pointer;
+      padding: 8px; /* Augmentation du padding */
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 1000; /* Ajout d'un z-index élevé */
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .theme-toggle .material-icons {
+      font-size: 24px; /* Augmentation de la taille de l'icône */
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle .material-icons {
+      font-size: 24px;
+      color: var(--title-color);
+      transition: transform 0.3s ease;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Ajout d'une ombre au texte */
+    }
+
+    .theme-toggle:hover .material-icons {
+      transform: rotate(30deg);
+    }
+
+    /* Style pour le sélecteur de langue */
+    .language-selector {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .language-selector label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--text-color);
+    }
+
+    .language-selector select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-color);
+      font-size: 14px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .language-selector select:hover {
+      border-color: var(--title-color);
+    }
+
+    .language-selector select:focus {
+      border-color: var(--title-color);
+      box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle">
+    <span class="material-icons">dark_mode</span>
+  </button>
+  <div class="card">
+    <h3>
+      <span class="material-icons">volume_up</span>
+      Sound Booster
+    </h3>
+    
+    <div class="volume-control">
+      <span class="material-icons">volume_down</span>
+      <input type="range" id="volumeSlider" min="0" max="1000" value="100">
+      <div class="volume-input-container">
+        <input type="number" id="volumeInput" min="0" max="1000" value="100">
+        <span>%</span>
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button id="muteButton">
+        <span class="material-icons">volume_off</span>
+        Mute
+      </button>
+      <button id="resetButton">
+        <span class="material-icons">restart_alt</span>
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <div class="language-selector">
+    <label for="language">Language</label>
+    <select id="language">
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+      <option value="it">Italiano</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文</option>
+      <option value="ko">한국어</option>
+    </select>
+  </div>
+
+  <div class="current-site" id="currentSite"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
