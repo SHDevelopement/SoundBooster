@@ -37,4 +37,4 @@ Download SoundBooster.zip
 
 ![image](https://github.com/user-attachments/assets/77a31f97-9bdc-4951-9ada-9133bcc24ae8)
 
-Extract SoundBooster.zip, then go to our navigator, go to extension → Manage extension → Active dev mode → Select load unpaqued extension and select the SoundBooster file
+Extract SoundBooster.zip, then go to our navigator, go to extension → Manage extension → Active dev mode → Select load unpacked extension and select the SoundBooster file
